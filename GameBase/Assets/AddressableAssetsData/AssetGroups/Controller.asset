@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: 665cfb8232dafba4194200077e0924af
   m_SerializeEntries:
   - m_GUID: 1bf0de4a218f237408b704064e70f039
-    m_Address: Assets/@Resources/Controller/Cube.prefab
+    m_Address: Monster
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad
