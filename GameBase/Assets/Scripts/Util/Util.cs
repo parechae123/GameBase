@@ -8,7 +8,7 @@ using Transform = UnityEngine.Transform;
 
 public static class Util
 {
-    public static T GetOrAddComponet<T>(GameObject go) where T : UnityEngine.Component
+    public static T GetOrAddComponent<T>(GameObject go) where T : UnityEngine.Component
     {
         T component = go.GetComponent<T>();         //GetComponent ½Ãµµ
         if (component == null)
