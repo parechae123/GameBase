@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,18 +6,20 @@ public class Define
 {
     public enum Scene
     {
-        UnKnown,
+        Unknown,
         TitleScene,
         LobbyScene,
-        GameScene
+        GameScene,
     }
+
     public enum Sound
     {
         Bgm,
         SubBgm,
         Effect,
-        Max
+        Max,
     }
+
     public enum UIEvent
     {
         Click,
@@ -29,9 +30,21 @@ public class Define
         Drag,
         EndDrag,
     }
+
     public enum ObjectType
     {
         Player,
-        Monster
+        Monster,
     }
+
+    public enum ItemType
+    {
+        Armor,
+        Potion,
+        Food
+    }
+
+    public static int ID_BRONZE_KEY = 201;
+    public static int ID_SILVER_KEY = 202;
+    public static int ID_GOLD_KEY = 203;
 }
