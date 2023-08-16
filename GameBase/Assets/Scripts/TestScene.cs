@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public class TestScene : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class TestScene : MonoBehaviour
         Managers.Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalCount) =>
          {
              Debug.Log("key : " + key + "Count : " + count + "totalCount : " + totalCount);
+             if(count == totalCount)
+             {
+                 Managers.Game.Init();
+             }
          });
     }
 
@@ -23,6 +28,20 @@ public class TestScene : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.F1))
         {
             Managers.UI.showToast("TestScene");
+        }
+        if (Input.GetKeyUp(KeyCode.F5))
+        {
+            Managers.Game.Gold += 1;
+        }
+        if (Input.GetKeyUp(KeyCode.F6))
+        {
+            Managers.Game.AddEquipment("1");
+        }
+        if (Input.GetKeyUp(KeyCode.F7))
+        {
+            Managers.Game.AddMaterialItem(ID_BRONZE_KEY, 1);
+            Managers.Game.AddMaterialItem(ID_SILVER_KEY, 1);
+            Managers.Game.AddMaterialItem(ID_GOLD_KEY, 1);
         }
     }
 }

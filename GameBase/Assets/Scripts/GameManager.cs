@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     {
         _path = Application.persistentDataPath + "/SaveData.json";
         Debug.Log("Save Path : " + _path);
-        //if(LoadGame()) return;
+        if (LoadGame()) return;
         PlayerPrefs.SetInt("ISFIRST", 1);
     }
     public int UserLevel
@@ -29,13 +29,13 @@ public class GameManager : MonoBehaviour
         set { _gameData.UserName = value; }
     }
     public event Action OnResourcesChanged;
-    public int gold
+    public int Gold
     {
         get { return _gameData.Gold; }
         set
         {
             _gameData.Gold = value;
-            //SaveGame();
+            SaveGame();
             OnResourcesChanged?.Invoke();
         }
     }
@@ -45,8 +45,86 @@ public class GameManager : MonoBehaviour
         set
         {
             _gameData.Dia = value;
-            //SaveGame();
+            SaveGame();
             OnResourcesChanged?.Invoke();
+        }
+    }
+    public List<Item> Owneditem
+    {
+        get { return _gameData.Owneditem; }
+        set
+        {
+            _gameData.Owneditem = value;
+        }
+    }
+    public event Action ItemsChanged;
+    public Item AddEquipment(string key)
+    {
+        if (key.Equals("None"))
+        {
+            return null;
+        }
+        Item equip = new Item(key);
+        Owneditem.Add(equip);
+        ItemsChanged?.Invoke();
+        return equip;
+    }
+    public Dictionary<int,int> ItemDictionary
+    {
+        get { return _gameData.ItemDictionary; }
+        set { _gameData.ItemDictionary = value; }
+    }
+    public Dictionary<ItemType,Item> Items
+    {
+        get { return _gameData.Items; }
+        set
+        {
+            _gameData.Items = value;
+            ItemsChanged?.Invoke();
+        }
+    }
+    public void EquipItem(ItemType type, Item equipment)
+    {
+        if (Items.ContainsKey(type))
+        {
+            Items[type].IsEquipped = false;
+            Items.Remove(type);
+        }
+        Items.Add(type, equipment);
+        equipment.IsEquipped = true;
+        ItemsChanged?.Invoke();
+    }
+    public void UnEquipItem(Item equipment)
+    {
+        if (Items.ContainsKey(equipment.itemData.ItemType))
+        {
+            Items[equipment.itemData.ItemType].IsEquipped = false;
+            Items.Remove(equipment.itemData.ItemType);
+        }
+        ItemsChanged?.Invoke();
+    }
+    public void ResetGame()
+    {
+        PlayerPrefs.SetInt("ISFIRST", 0);
+    }
+    public void AddMaterialItem(int id, int quantity)
+    {
+        if (ItemDictionary.ContainsKey(id))
+        {
+            ItemDictionary[id] += quantity;
+        }
+        else
+        {
+            ItemDictionary[id] = quantity;
+        }
+        SaveGame();
+    }
+    public void RemoveMaterialItem(int id, int quantity)
+    {
+        if (ItemDictionary.ContainsKey(id))
+        {
+            ItemDictionary[id] -= quantity;
+            SaveGame();
         }
     }
     public void SaveGame()
@@ -54,5 +132,25 @@ public class GameManager : MonoBehaviour
         //GameData Class를 json으로 변환하여 저장
         string jsonStr = JsonConvert.SerializeObject(_gameData);
         File.WriteAllText(_path, jsonStr);
+    }
+    public bool LoadGame()
+    {
+        if (PlayerPrefs.GetInt("ISFIRST", 1) == 0)
+        {
+            string path = Application.persistentDataPath + "/SaveData.json";
+            if (File.Exists(path))
+                File.Delete(path);
+            return false;
+        }
+        if (File.Exists(_path) == false)
+            return false;
+
+        string fileStr = File.ReadAllText(_path);
+        GameData data = JsonConvert.DeserializeObject<GameData>(fileStr);
+        if(data != null)
+        {
+            _gameData = data;
+        }
+        return true;
     }
 }
