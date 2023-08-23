@@ -9,6 +9,7 @@ using static Define;
 public class ObjectManager
 {
     public HashSet<MonsterController> Monsters { get; } = new HashSet<MonsterController>();
+    public HashSet<BoxController> Boxs { get; } = new HashSet<BoxController>();
 
     public Transform MonsterTransform
     {
@@ -43,6 +44,17 @@ public class ObjectManager
             Monsters.Add(mc);
             return mc as T;
         }
+        else if (type == typeof(BoxController))
+        {
+            GameObject go = Managers.Resource.Instantiate("Box", pooling: true);
+            BoxController mc = go.GetOrAddComponent<BoxController>();
+            go.transform.position = position;
+            Boxs.Add(mc);
+
+            GameObject.Find("@Grid").GetOrAddComponent<GridController>().Add(go);
+
+            return mc as T;
+        }
         return null;
     }
     public void Despawn<T>(T obj) where T : BaseController
@@ -52,6 +64,13 @@ public class ObjectManager
         {
             Monsters.Remove(obj as MonsterController);
             Managers.Resource.Destroy(obj.gameObject);
+        }
+        else if(type == typeof(BoxController))
+        {
+            Boxs.Remove(obj as BoxController);
+            Managers.Resource.Destroy(obj.gameObject);
+
+            GameObject.Find("@Grid").GetOrAddComponent<GridController>().Remove(obj.gameObject);
         }
     }
 }
