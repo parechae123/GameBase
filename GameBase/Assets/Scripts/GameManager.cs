@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using static Define;
 
 
-public class GameManager : MonoBehaviour
+public class GameManager
 {
     public GameData _gameData = new GameData();
     string _path;
