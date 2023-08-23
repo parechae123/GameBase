@@ -49,6 +49,22 @@ public class GameManager
             OnResourcesChanged?.Invoke();
         }
     }
+    public bool BGMOn
+    {
+        get { return _gameData.BGMOn; }
+        set
+        {
+            _gameData.BGMOn = value;
+        }
+    }
+    public bool EffectSoundOn
+    {
+        get { return _gameData.EffectSoundOn; }
+        set
+        {
+            _gameData.EffectSoundOn = value;
+        }
+    }
     public List<Item> Owneditem
     {
         get { return _gameData.Owneditem; }
